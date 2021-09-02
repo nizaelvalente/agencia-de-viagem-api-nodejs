@@ -4,11 +4,13 @@ const UserModel = mongoose.model('User') // pra que server esse 'User' ????
 const { ObjectId } = mongoose.Types
 const bcrypt = require('bcryptjs')
 const jwt = require('jsonwebtoken')
+require('dotenv').config()
 
 module.exports = {
     async create(newUserData) { // newUserData - dados para criação de novo usuário
         try {
-            const userData = await validation(newUserData) // va
+            delete newUserData._id
+            const userData = await validation(newUserData) 
             if (userData.status == 400) {
                 return userData
             }
@@ -16,6 +18,9 @@ module.exports = {
             return { status: 200, data: usuarioCriado }
 
         } catch (error) {
+            if(error.message.includes('E11000')){
+                return { status: 400, data: { erro: 'email já cadastrdo.' } }
+            }
             return { status: 400, data: { erro: error.message } }
         }
     },
@@ -39,13 +44,14 @@ module.exports = {
                 return { status: 400, data: { erro: 'Senha inválida' } }
             }
 
-            const token = generateToken({ id: user.id })
+            const token = generateToken({ id: user._id.toString() })
 
             return { status: 200, data: {token, user} }
 
         } catch (error) {
 
             return { status: 400, data: { erro: error.message } }
+            
         }
     },
 
@@ -78,10 +84,15 @@ module.exports = {
         }
     },
 
-
-    async update(id, data) {
+    async update(id, data, user) {
+        
+        // console.log(user._id.toString(), id)
+        console.log(user)
         // validar atualização de objeto endereço
         try {
+            if(user._id.toString() !== id){
+            return { status: 400, data: { erro: 'Sem autorização' } }
+            }
             const usuario = await UserModel.findByIdAndUpdate(id, data, { new: true }) // 
             return { status: 200, data: usuario }
 
@@ -103,6 +114,6 @@ module.exports = {
 }
 
 function generateToken(params = {}) {
-    const token = jwt.sign(params, 'valente', { expiresIn: 86400 })
+    const token = jwt.sign(params, process.env.SECRET, { expiresIn: 86400 })
     return `Bearer ${token}`
 }

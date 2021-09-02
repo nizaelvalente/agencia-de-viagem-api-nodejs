@@ -1,10 +1,11 @@
 require('./schemas/userSchemas')
+require('dotenv').config()
 
 const express = require('express');
 const cors = require('cors')
 const mongoose = require('mongoose')
 
-mongoose.connect('mongodb://localhost:27017/meu_primeiro_projeto', { // conecta com o banco de dados
+mongoose.connect(process.env.URL_MONGO, { // conecta com o banco de dados
     useNewUrlParser: true,
     useUnifiedTopology: true
 }).then(() => {

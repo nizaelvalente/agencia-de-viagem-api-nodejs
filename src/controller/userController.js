@@ -27,7 +27,7 @@ module.exports = {
     //atualizar usuario
 
     async update(req, res) {
-        const { status, data } = await User.update(req.params.id, req.body)
+        const { status, data } = await User.update(req.params.id, req.body, req.user)
         return res.status(status).send(data)
     },
 

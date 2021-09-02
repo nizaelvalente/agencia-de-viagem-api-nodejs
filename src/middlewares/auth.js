@@ -1,7 +1,8 @@
 const mongoose = require('mongoose')
 const UserModel = mongoose.model('User')
 const jwt = require('jsonwebtoken')
-const secret = 'valente'
+require('dotenv').config()
+
 module.exports = (req, res, next) => {
     const header = req.headers.authorization
     if (!header) {
@@ -9,6 +10,7 @@ module.exports = (req, res, next) => {
     }
 
     const parts = header.split(' ')
+
     if (parts.length !== 2) {
         return res.status(401).send({ erro: 'Erro no token.' })
     }
@@ -18,7 +20,7 @@ module.exports = (req, res, next) => {
         return res.status(401).send({ erro: 'Token mal formatado.' })
     }
 
-    jwt.verify(token, secret, async (erro, decoded) => {
+    jwt.verify(token, process.env.SECRET, async (erro, decoded) => {
         if (erro) {
             return res.status(401).send({ erro: 'Token inválido.' })
         }

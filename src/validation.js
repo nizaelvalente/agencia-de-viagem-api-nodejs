@@ -8,7 +8,7 @@ module.exports = {
         //validação de campos vazios
         if (!name ||  !gender || !age ||  !email ||  !password 
             || !logradouro ||  !localidade || !numero || !bairro || !uf) {
-            return { status: 400, data: 'Todos os campos são obrigatóriosd' }
+            return { status: 400, data: 'Todos os campos são obrigatórios' }
         }
 
         // validação no nome
