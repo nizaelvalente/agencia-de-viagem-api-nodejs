@@ -1,6 +1,6 @@
 const { validation } = require('../validation')
 const mongoose = require('mongoose')
-const UserModel = mongoose.model('User') // pra que server esse 'User' ????
+const UserScheme = mongoose.model('User')
 const { ObjectId } = mongoose.Types
 const bcrypt = require('bcryptjs')
 const jwt = require('jsonwebtoken')
@@ -14,7 +14,7 @@ module.exports = {
             if (userData.status == 400) {
                 return userData
             }
-            const usuarioCriado = await UserModel.create(userData)
+            const usuarioCriado = await UserScheme.create(userData)
             return { status: 200, data: usuarioCriado }
 
         } catch (error) {
@@ -33,7 +33,7 @@ module.exports = {
                 return { status: 400, data: { erro: 'Todos os campos são obrigatórios' } }
             }
 
-            const user = await UserModel.findOne({ email }).select('+password')
+            const user = await UserScheme.findOne({ email }).select('+password')
 
             if (!user) {
                 return { status: 400, data: { erro: 'Usuário não encontrado.' } }
@@ -44,7 +44,7 @@ module.exports = {
                 return { status: 400, data: { erro: 'Senha inválida' } }
             }
 
-            const token = generateToken({ id: user._id.toString() })
+            const token = generateToken({ _id: user._id.toString() })
 
             return { status: 200, data: {token, user} }
 
@@ -57,7 +57,7 @@ module.exports = {
 
     async getById(id) {
         try {
-            const [usuario] = await UserModel.find({
+            const [usuario] = await UserScheme.find({
                 _id: ObjectId(id),
                 deleted: false
             })
@@ -76,7 +76,7 @@ module.exports = {
     async get(query) {
         try {
             query.deleted = false
-            const usuarios = await UserModel.find(query)
+            const usuarios = await UserScheme.find(query)
             return { status: 200, data: usuarios }
 
         } catch (error) {
@@ -93,7 +93,7 @@ module.exports = {
             if(user._id.toString() !== id){
             return { status: 400, data: { erro: 'Sem autorização' } }
             }
-            const usuario = await UserModel.findByIdAndUpdate(id, data, { new: true }) // 
+            const usuario = await UserScheme.findByIdAndUpdate(id, data, { new: true }) // 
             return { status: 200, data: usuario }
 
         } catch (error) {
@@ -103,7 +103,7 @@ module.exports = {
 
     async delete(id) {
         try {
-            await UserModel.findByIdAndUpdate(id, { deleted: true })
+            await UserScheme.findByIdAndUpdate(id, { deleted: true })
             return { status: 200, data: "usuario deletado com sucesso" }
 
         } catch (error) {

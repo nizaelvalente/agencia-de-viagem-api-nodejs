@@ -25,7 +25,7 @@ module.exports = (req, res, next) => {
             return res.status(401).send({ erro: 'Token inválido.' })
         }
 
-        const user = await UserModel.findOne({id:decoded.id})
+        const user = await UserModel.findOne({_id: String(decoded._id)})
         req.user = user
 
         return next()

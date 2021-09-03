@@ -1,4 +1,4 @@
-require('./schemas/userSchemas')
+require('./schemas/userSchema')
 require('dotenv').config()
 
 const express = require('express');
