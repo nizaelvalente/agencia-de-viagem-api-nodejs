@@ -1,6 +1,7 @@
 const mongoose = require("mongoose");
 
-const ticketSchema = new mongoose.Schema(
+
+const TicketSchema = new mongoose.Schema(
   {
     class: { type: String, enum: ["economic", "executive"], required: true },
     origin: { type: String, required: true },
@@ -15,4 +16,5 @@ const ticketSchema = new mongoose.Schema(
   { timestamps: true }
 );
 
-mongoose.model("Ticket", ticketSchema);
+mongoose.model("Ticket", TicketSchema);
+

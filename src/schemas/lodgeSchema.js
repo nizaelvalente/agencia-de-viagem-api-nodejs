@@ -1,6 +1,6 @@
 const mongoose = require("mongoose");
 
-const lodgeSchema = new mongoose.Schema(
+const LodgeSchema = new mongoose.Schema(
   {
     name: { type: String, required: true },
     typeOfRoom: { type: String, enum: ["Suite", "Quarto"], required: true },
@@ -17,4 +17,4 @@ const lodgeSchema = new mongoose.Schema(
   { timestamps: true }
 );
 
-mongoose.model("Lodge", lodgeSchema);
+mongoose.model("Lodge", LodgeSchema);

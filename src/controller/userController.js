@@ -1,7 +1,6 @@
 const User = require("../model/userModel.js");
 
 module.exports = {
-  // rota para criar novo usuario
   async create(req, res) {
     const { status, data } = await User.create(req.body);
     return res.status(status).send(data);
@@ -12,7 +11,11 @@ module.exports = {
     return res.status(status).send(data);
   },
 
-  // buscar usuario pelo id
+  async getAuth(req, res) {
+    return res.status(status).send(data);
+  },
+
+
   async getById(req, res) {
     const { status, data } = await User.getById(req.params.id);
     return res.status(status).send(data);
@@ -23,14 +26,17 @@ module.exports = {
     return res.status(status).send(data);
   },
 
-  //atualizar usuario
-
   async update(req, res) {
     const { status, data } = await User.update(
       req.params.id,
       req.body,
       req.user
     );
+    return res.status(status).send(data);
+  },
+
+  async updateAdmin(req, res) {
+    const { status, data } = await User.updateAdmin(req.params.id, req.body);
     return res.status(status).send(data);
   },
 

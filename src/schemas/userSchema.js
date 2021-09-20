@@ -1,4 +1,3 @@
-/// base do campo de dados
 const mongoose = require("mongoose");
 const bcrypt = require("bcryptjs");
 
@@ -9,6 +8,7 @@ const UserSchema = new mongoose.Schema(
     age: { type: Number, required: true, min: 18 },
     email: { type: String, required: true, unique: true },
     password: { type: String, required: true, select: false },
+    admin: { type: Boolean, default: false },
     address: {
       logradouro: { type: String, required: true },
       localidade: { type: String, required: true },
@@ -26,4 +26,4 @@ UserSchema.pre("save", async function () {
   this.password = await bcrypt.hash(this.password, quantity);
 });
 
-mongoose.model("User", UserSchema); // onde esta esse 'User'??????
+mongoose.model("User", UserSchema);
